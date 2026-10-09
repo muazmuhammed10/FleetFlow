@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FleetFlow — System Documentation</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #1a1a2e;
+    background: #fff;
+    line-height: 1.7;
+  }
+
+  /* ── Cover Page ── */
+  .cover {
+    height: 100vh;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+  }
+  .cover-logo {
+    background: #2563eb;
+    border-radius: 20px;
+    padding: 18px 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+    box-shadow: 0 20px 40px rgba(37,99,235,0.4);
+  }
+  .cover-logo span {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+  .cover h1 {
+    font-size: 52px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+  .cover h1 em { color: #60a5fa; font-style: normal; }
+  .cover .subtitle {
+    font-size: 20px;
+    color: #94a3b8;
+    margin-bottom: 50px;
+    max-width: 500px;
+  }
+  .cover-divider {
+    width: 80px;
+    height: 4px;
+    background: #2563eb;
+    border-radius: 2px;
+    margin: 0 auto 40px;
+  }
+  .cover-meta {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 2;
+  }
+  .cover-meta strong { color: #94a3b8; }
+
+  .cover-badges {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 50px;
+  }
+  .badge {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #e2e8f0;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* ── General Layout ── */
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 50px;
+  }
+
+  .page-break { page-break-before: always; }
+
+  /* ── TOC ── */
+  .toc { page-break-after: always; }
+  .toc h2 { font-size: 32px; font-weight: 800; color: #0f172a; margin-bottom: 30px; }
+  .toc-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 15px;
+  }
+  .toc-item .num {
+    background: #2563eb;
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+    margin-right: 14px;
+    flex-shrink: 0;
+  }
+  .toc-item .title { flex: 1; color: #334155; font-weight: 500; }
+  .toc-item .dots { flex: 1; border-bottom: 2px dotted #e2e8f0; margin: 0 12px; }
+  .toc-item .pg { color: #94a3b8; font-size: 14px; }
+
+  /* ── Section Headings ── */
+  .section-header {
+    margin-bottom: 36px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #e2e8f0;
+  }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #2563eb;
+    margin-bottom: 8px;
+  }
+  .section-header h2 {
+    font-size: 34px;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+  }
+  .section-header p {
+    font-size: 16px;
+    color: #64748b;
+    margin-top: 10px;
+    max-width: 680px;
+  }
+
+  h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 36px 0 14px;
+  }
+  h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #334155;
+    margin: 24px 0 10px;
+  }
+
+  p { font-size: 15px; color: #475569; margin-bottom: 14px; line-height: 1.75; }
+  ul { padding-left: 22px; margin-bottom: 16px; }
+  li { font-size: 15px; color: #475569; margin-bottom: 6px; }
+
+  /* ── Screenshot Block ── */
+  .screenshot-block {
+    margin: 32px 0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    border: 1px solid #e2e8f0;
+  }
+  .screenshot-block img {
+    width: 100%;
+    display: block;
+  }
+  .screenshot-caption {
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    padding: 14px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .screenshot-caption .fig-num {
+    background: #2563eb;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .screenshot-caption .fig-text {
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.6;
+  }
+  .screenshot-caption .fig-text strong {
+    color: #0f172a;
+    font-weight: 600;
+  }
+
+  /* ── Role Card ── */
+  .role-card {
+    background: linear-gradient(135deg, #f0f7ff, #e8f0fe);
+    border: 1px solid #bfdbfe;
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin: 20px 0;
+  }
+  .role-card .role-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1e3a8a;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .role-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-admin    { background: #fee2e2; color: #991b1b; }
+  .badge-manager  { background: #fef3c7; color: #92400e; }
+  .badge-agent    { background: #d1fae5; color: #065f46; }
+  .badge-customer { background: #dbeafe; color: #1e40af; }
+
+  /* ── Info Box ── */
+  .info-box {
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 14px;
+    color: #1e40af;
+    line-height: 1.6;
+  }
+
+  /* ── Feature Grid ── */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .feature-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .feature-item .fi-title {
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .feature-item .fi-desc {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.5;
+  }
+
+  /* ── Flow Diagram ── */
+  .flow-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 24px 0;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px dashed #e2e8f0;
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    background: #2563eb;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .flow-content .fc-title { font-weight: 700; color: #1e293b; font-size: 15px; }
+  .flow-content .fc-desc  { font-size: 14px; color: #64748b; margin-top: 2px; }
+  .flow-arrow {
+    font-size: 20px;
+    color: #94a3b8;
+    margin-left: 14px;
+    margin-top: 6px;
+  }
+
+  /* ── Tech Stack Table ── */
+  .tech-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .tech-table th {
+    background: #0f172a;
+    color: #fff;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+  }
+  .tech-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #475569;
+  }
+  .tech-table tr:nth-child(even) td { background: #f8fafc; }
+
+  /* ── Security Table ── */
+  .sec-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .sec-table th {
+    background: #1e3a8a;
+    color: #fff;
+    padding: 12px 16px;
+    text-align: left;
+  }
+  .sec-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #475569;
+    vertical-align: top;
+  }
+  .sec-table tr:nth-child(even) td { background: #f8fafc; }
+
+  /* ── Print ── */
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page-break { page-break-before: always; }
+    .cover { page-break-after: always; }
+    .toc { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     COVER PAGE
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-logo">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/>
+      <rect x="9" y="11" width="14" height="10" rx="2"/>
+      <circle cx="12" cy="19" r="1"/><circle cx="20" cy="19" r="1"/>
+    </svg>
+    <span>FleetFlow</span>
+  </div>
+
+  <h1>Secure Vehicle Rental &amp;<br/><em>Fleet Management System</em></h1>
+  <p class="subtitle">A complete full-stack web platform for managing vehicles, bookings, payments, maintenance, and fleet operations</p>
+
+  <div class="cover-divider"></div>
+
+  <div class="cover-badges">
+    <span class="badge">React + TypeScript</span>
+    <span class="badge">Node.js + Express</span>
+    <span class="badge">PostgreSQL + Prisma</span>
+    <span class="badge">Tailwind CSS</span>
+    <span class="badge">JWT Authentication</span>
+    <span class="badge">Role-Based Access</span>
+  </div>
+
+  <div class="cover-meta">
+    <strong>Document Type:</strong> System Documentation &amp; User Guide<br/>
+    <strong>Version:</strong> 1.0.0<br/>
+    <strong>Date:</strong> October 2026<br/>
+    <strong>Environment:</strong> localhost:5173 (Development)<br/>
+    <strong>Author:</strong> FleetFlow Development Team
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     TABLE OF CONTENTS
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="page toc">
+  <div class="section-header">
+    <div class="section-label">Navigation</div>
+    <h2>Table of Contents</h2>
+  </div>
+
+  <div class="toc-item"><div class="num">1</div><div class="title">System Introduction &amp; Overview</div><div class="dots"></div><div class="pg">3</div></div>
+  <div class="toc-item"><div class="num">2</div><div class="title">Technology Stack</div><div class="dots"></div><div class="pg">4</div></div>
+  <div class="toc-item"><div class="num">3</div><div class="title">Landing Page — Public Interface</div><div class="dots"></div><div class="pg">5</div></div>
+  <div class="toc-item"><div class="num">4</div><div class="title">Authentication — Login &amp; Registration</div><div class="dots"></div><div class="pg">7</div></div>
+  <div class="toc-item"><div class="num">5</div><div class="title">User Roles &amp; Permissions</div><div class="dots"></div><div class="pg">9</div></div>
+  <div class="toc-item"><div class="num">6</div><div class="title">Customer Role — Screens &amp; Features</div><div class="dots"></div><div class="pg">10</div></div>
+  <div class="toc-item"><div class="num">7</div><div class="title">Administrator Role — Screens &amp; Features</div><div class="dots"></div><div class="pg">13</div></div>
+  <div class="toc-item"><div class="num">8</div><div class="title">Rental Agent Role — Screens &amp; Features</div><div class="dots"></div><div class="pg">18</div></div>
+  <div class="toc-item"><div class="num">9</div><div class="title">Fleet Manager Role — Screens &amp; Features</div><div class="dots"></div><div class="pg">20</div></div>
+  <div class="toc-item"><div class="num">10</div><div class="title">Booking &amp; Payment Lifecycle</div><div class="dots"></div><div class="pg">22</div></div>
+  <div class="toc-item"><div class="num">11</div><div class="title">Security Features</div><div class="dots"></div><div class="pg">23</div></div>
+  <div class="toc-item"><div class="num">12</div><div class="title">Conclusion</div><div class="dots"></div><div class="pg">24</div></div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 1 — INTRODUCTION
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-label">Section 1</div>
+    <h2>System Introduction &amp; Overview</h2>
+    <p>A full-stack, production-ready vehicle rental and fleet management platform built with modern web technologies.</p>
+  </div>
+
+  <p>
+    <strong>FleetFlow</strong> is a secure, full-stack web application designed to manage every aspect of a vehicle rental business. It covers the complete operational lifecycle — from browsing and booking a vehicle online, through payment, pickup, active rental, return inspection, and final invoicing — all within a single unified platform.
+  </p>
+
+  <p>
+    The system is built for real-world use, with a focus on security, data integrity, and role-appropriate access. It supports four distinct user roles — Administrator, Fleet Manager, Rental Agent, and Customer — each with a tailored interface and strictly enforced permissions on the backend.
+  </p>
+
+  <h3>What FleetFlow Solves</h3>
+  <p>Traditional vehicle rental businesses often rely on spreadsheets, paper contracts, and disconnected tools. FleetFlow replaces all of that with:</p>
+  <ul>
+    <li>A <strong>customer-facing booking portal</strong> where clients browse vehicles, check availability, submit bookings, and pay online</li>
+    <li>A <strong>staff management console</strong> where agents approve bookings, record pickups and returns, and manage vehicle inspections</li>
+    <li>A <strong>fleet operations dashboard</strong> where managers track vehicle utilisation, schedule maintenance, manage drivers, and export reports</li>
+    <li>A <strong>secure audit trail</strong> that records every action performed in the system for compliance and accountability</li>
+  </ul>
+
+  <h3>Key Capabilities</h3>
+  <div class="feature-grid">
+    <div class="feature-item">
+      <div class="fi-title">🚗 Fleet Management</div>
+      <div class="fi-desc">Add, edit, and track every vehicle — availability, compliance dates, mileage, and service history.</div>
+    </div>
+    <div class="feature-item">
+      <div class="fi-title">📅 Booking System</div>
+      <div class="fi-desc">Real-time availability checking with concurrency-safe double-booking prevention using serializable database transactions.</div>
+    </div>
+    <div class="feature-item">
+      <div class="fi-title">💳 Payment Flow</div>
+      <div class="fi-desc">Structured simulated payment with security deposit, collateral tracking, and full transaction history.</div>
+    </div>
+    <div class="feature-item">
+      <div class="fi-title">🔧 Maintenance</div>
+      <div class="fi-desc">Schedule and track all service records, assign technicians, and automatically flag vehicles as unavailable during maintenance.</div>
+    </div>
+    <div class="feature-item">
+      <div class="fi-title">👥 Driver Management</div>
+      <div class="fi-desc">Maintain driver profiles, track licence expiry, manage availability, and assign drivers to bookings.</div>
+    </div>
+    <div class="feature-item">
+      <div class="fi-title">📊 Reports &amp; Exports</div>
+      <div class="fi-desc">Generate booking and payment reports. Export CSV files with formula injection protection for safe analysis.</div>
+    </div>
+    <div class="feature-item">
+      <div class="fi-title">🛡️ Security &amp; Audit</div>
+      <div class="fi-desc">Argon2id password hashing, JWT tokens, rate limiting, and a complete audit log of all system events.</div>
+    </div>
+    <div class="feature-item">
+      <div class="fi-title">📋 Contracts</div>
+      <div class="fi-desc">Generate and manage rental contracts tied to confirmed bookings, with full term documentation.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 2 — TECHNOLOGY STACK
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-label">Section 2</div>
+    <h2>Technology Stack</h2>
+    <p>FleetFlow is built entirely with modern, production-grade open-source technologies.</p>
+  </div>
+
+  <table class="tech-table">
+    <tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr>
+    <tr><td>Frontend Framework</td><td>React 18 + TypeScript</td><td>Component-based UI with strong typing</td></tr>
+    <tr><td>Frontend Build</td><td>Vite 6</td><td>Fast development server and production bundler</td></tr>
+    <tr><td>Styling</td><td>Tailwind CSS 3</td><td>Utility-first responsive design system</td></tr>
+    <tr><td>Forms &amp; Validation</td><td>React Hook Form + Zod</td><td>Client-side form handling and schema validation</td></tr>
+    <tr><td>HTTP Client</td><td>Axios</td><td>API calls with automatic JWT refresh interceptor</td></tr>
+    <tr><td>Charts</td><td>Recharts</td><td>Revenue and booking analytics charts</td></tr>
+    <tr><td>Routing</td><td>React Router v7</td><td>Client-side navigation with protected routes</td></tr>
+    <tr><td>Backend Runtime</td><td>Node.js + Express.js</td><td>REST API server</td></tr>
+    <tr><td>Backend Language</td><td>TypeScript</td><td>Type-safe server code</td></tr>
+    <tr><td>Database</td><td>PostgreSQL 14</td><td>Relational database with ACID transactions</td></tr>
+    <tr><td>ORM</td><td>Prisma 5</td><td>Type-safe database access and migrations</td></tr>
+    <tr><td>Password Hashing</td><td>Argon2id</td><td>Industry-leading secure password storage</td></tr>
+    <tr><td>Authentication</td><td>JWT (Access + Refresh)</td><td>Stateless token-based auth with revocation</td></tr>
+    <tr><td>Security Headers</td><td>Helmet.js</td><td>HTTP security headers</td></tr>
+    <tr><td>Rate Limiting</td><td>express-rate-limit</td><td>Brute force and abuse protection</td></tr>
+    <tr><td>Logging</td><td>Winston</td><td>Structured server-side logging</td></tr>
+    <tr><td>Email</td><td>Nodemailer + Ethereal</td><td>Password reset emails (preview in development)</td></tr>
+    <tr><td>Monetary Math</td><td>Decimal.js</td><td>Precise decimal arithmetic for financial calculations</td></tr>
+    <tr><td>Testing</td><td>Vitest</td><td>Unit tests for pricing engine and auth utilities</td></tr>
+    <tr><td>Containerisation</td><td>Docker + Docker Compose</td><td>Reproducible deployment environment</td></tr>
+    <tr><td>CI/CD</td><td>GitHub Actions</td><td>Automated lint, type check, test, and build pipeline</td></tr>
+  </table>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 3 — LANDING PAGE
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-label">Section 3</div>
+    <h2>Landing Page — Public Interface</h2>
+    <p>The first thing any visitor sees when they open FleetFlow. Fully public, no login required.</p>
+  </div>
+
+  <p>
+    When a user navigates to the FleetFlow URL, they are greeted by a professional marketing landing page. This page is the public face of the platform. It communicates the system's value, showcases the fleet, and provides clear entry points for new and returning users. Visitors who are already logged in are automatically redirected to their dashboard.
+  </p>
+
+  <!-- Screenshot 1 -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #0f172a, #1e3a8a); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 1.1 — Hero Section: Landing Page</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Full-screen hero with "Drive your fleet forward." headline, blue CTA buttons (Get started free / Sign in), trust badges (500+ Vehicles, Real-time Tracking, Secure Platform), and top navigation bar.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 1.1</span>
+      <div class="fig-text">
+        <strong>Hero Section — Landing Page.</strong>
+        The full-screen hero section shows a dramatic car photograph with a dark overlay. The headline reads "Drive your fleet forward." in large bold text with the phrase highlighted in blue. Two call-to-action buttons are displayed prominently: <em>Get started free</em> (blue, primary) which takes new users to the registration page, and <em>Sign in</em> (dark, secondary) for returning users. Trust badges showing "500+ Vehicles", "Real-time Tracking", and "Secure Platform" build credibility. The navigation bar at the top contains links to Features, Fleet, and About sections, plus Sign in and Get Started buttons.
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 2 -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #1e3a8a, #2563eb); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 1.2 — Features Section: "Everything you need"</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Six animated feature cards: Smart Fleet Management, Secure &amp; Compliant, Instant Bookings, Powerful Analytics, Multi-Role Access, Full Rental Lifecycle — each with a coloured icon and description.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 1.2</span>
+      <div class="fig-text">
+        <strong>Features Section — "Everything you need".</strong>
+        This section lists the six core capabilities of FleetFlow displayed as animated cards. Each card has a coloured icon and a short description. <em>Smart Fleet Management</em> explains real-time vehicle tracking. <em>Secure &amp; Compliant</em> highlights role-based access and audit logs. <em>Instant Bookings</em> describes the customer booking flow. <em>Powerful Analytics</em>, <em>Multi-Role Access</em>, and <em>Full Rental Lifecycle</em> complete the feature set. Cards animate upward as the user scrolls down the page.
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 3 -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #0f172a, #374151); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 1.3 — Fleet Showcase: "Every vehicle, every need"</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Four vehicle cards showing BMW 5 Series (Luxury), Ford Explorer (SUV), Toyota Corolla (Economy), and Toyota RAV4 (Hybrid SUV) — each with photo, category badge, daily rate, and "Book this vehicle" button.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 1.3</span>
+      <div class="fig-text">
+        <strong>Fleet Showcase — "Every vehicle, every need".</strong>
+        Four real vehicle photographs are displayed in a card grid. Each card shows the vehicle category badge (Luxury, SUV, Economy, Hybrid SUV), a full-width photo, the vehicle name, the daily rental price in a blue badge, and a "Book this vehicle" button. When hovered, the card lifts upward and the photo zooms in slightly, creating a smooth interactive effect. Clicking any card takes the visitor to the registration page to create an account before booking.
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 4 -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #1e3a8a, #1d4ed8); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 1.4 — How It Works: 3-Step Process</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Three-step visual guide: Step 01 – Create account, Step 02 – Browse &amp; book (choose vehicle, set dates), Step 03 – Pick up &amp; drive. Followed by a "Ready to get started?" call-to-action banner.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 1.4</span>
+      <div class="fig-text">
+        <strong>Process Section — "How it works".</strong>
+        A three-step visual guide explains the rental process in plain language. <em>Step 01 – Create account:</em> Sign up in seconds, no credit card required. <em>Step 02 – Browse &amp; book:</em> Choose from the fleet, set your dates and submit a booking request. <em>Step 03 – Pick up &amp; drive:</em> Get approved, collect the keys, enjoy the rental and return. Below this section is a call-to-action banner inviting visitors to join FleetFlow.
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 5 -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #0f172a, #1e3a8a); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 1.5 — CTA Banner &amp; Footer</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">"Ready to get started?" banner with car background photo, "Create free account" (white) and "Sign in" (outlined) buttons. Footer below shows FleetFlow logo, copyright, and quick links to Sign in and Register.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 1.5</span>
+      <div class="fig-text">
+        <strong>Call-to-Action Banner &amp; Footer.</strong>
+        A deep blue banner with a car photograph in the background contains the headline "Ready to get started?" with two buttons: <em>Create free account</em> (white button) and <em>Sign in</em> (outlined button). This is the final conversion point on the landing page. The footer below shows the FleetFlow logo, copyright information, and quick navigation links to Sign in and Register pages.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 4 — AUTHENTICATION
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-label">Section 4</div>
+    <h2>Authentication — Login &amp; Registration</h2>
+    <p>Secure access control with Argon2id hashing, JWT tokens, and rate limiting.</p>
+  </div>
+
+  <p>
+    FleetFlow uses a modern JWT-based authentication system. When a user logs in, they receive a short-lived access token (15 minutes) and a long-lived refresh token (7 days). The access token is automatically refreshed in the background so users are never interrupted mid-session. Passwords are hashed using <strong>Argon2id</strong> — the strongest password hashing algorithm available — with 64 MB memory cost and 3 iterations.
+  </p>
+
+  <div class="info-box">
+    🔒 <strong>Security note:</strong> Public registration always creates a Customer account. It is not possible to self-register as an Administrator or Fleet Manager. Staff accounts are created by administrators only.
+  </div>
+
+  <!-- Screenshot 6 — Login -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #0f172a, #1e3a8a); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 2.1 — Login Page: Sign In</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Split-screen layout: left panel shows sports car photo with "Drive your fleet forward." overlay and trust badges; right panel is white with email + password inputs (show/hide toggle), "Forgot password?" link, blue Sign in button, and "← Back to home" link.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173/login</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 2.1</span>
+      <div class="fig-text">
+        <strong>Login Page — Sign In.</strong>
+        The login page uses a split-screen layout. The left panel shows a full-screen photograph of a sports car with the tagline "Drive your fleet forward." overlaid in white and blue text, along with trust badges. The right panel is clean white with a "Sign in" heading, email address input, password input with a show/hide toggle, a "Forgot password?" link, and a blue "Sign in" button. A "← Back to home" link at the bottom returns the user to the landing page without logging in. Authentication attempts are rate-limited to prevent brute-force attacks.
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 7 — Register -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #1e3a8a, #2563eb); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 2.2 — Registration Page: Create Account</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Split-screen with car photo left ("Join thousands of happy renters.") and registration form right: first name, last name, email, phone (optional), password, confirm password — with strict password requirements. All new accounts created as Customer role.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173/register</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 2.2</span>
+      <div class="fig-text">
+        <strong>Registration Page — Create Account.</strong>
+        The registration page follows the same split-screen design, with a different car photograph on the left and the text "Join thousands of happy renters." The form on the right collects first name, last name, email address, phone number (optional), password, and confirm password. The password must meet strict requirements: minimum 8 characters, at least one uppercase letter, one lowercase letter, one number, and one special character. All new accounts are created with the Customer role. A "Create account" button submits the form, and a link below redirects to sign in for existing users.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 5 — USER ROLES
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-label">Section 5</div>
+    <h2>User Roles &amp; Permissions</h2>
+    <p>FleetFlow has four distinct roles, each with a tailored interface and strictly enforced backend permissions.</p>
+  </div>
+
+  <p>
+    Role-based access control (RBAC) is enforced on <strong>every API endpoint on the server</strong>. The frontend interface simply reflects what each user is allowed to do — hiding a button does not grant access. If a user attempts to call a restricted API endpoint directly, the server rejects the request with a 403 Forbidden response.
+  </p>
+
+  <div class="role-card">
+    <div class="role-title">🔴 Administrator <span class="role-badge badge-admin">Highest Access</span></div>
+    <p>The Administrator has full access to every module in the system. They can manage all users, vehicles, bookings, payments, contracts, maintenance, drivers, and reports. They are the only role with access to the Audit Log, which records every action performed in the system. Administrators can change user roles, suspend accounts, and create staff members.</p>
+    <p><strong>Sidebar modules:</strong> Dashboard, Vehicles, Bookings, Contracts, Customers, Payments, Maintenance, Drivers, Reports, Notifications, Audit Log</p>
+  </div>
+
+  <div class="role-card" style="background: linear-gradient(135deg,#fffbeb,#fef3c7); border-color:#fcd34d;">
+    <div class="role-title">🟡 Fleet Manager <span class="role-badge badge-manager">Operations</span></div>
+    <p>The Fleet Manager oversees the vehicle fleet and operational side of the business. They can add and edit vehicles, schedule maintenance, manage drivers, view revenue charts, and export reports. They can also approve bookings and manage contracts, but they cannot access the Audit Log or change user roles.</p>
+    <p><strong>Sidebar modules:</strong> Dashboard, Vehicles, Bookings, Contracts, Customers, Payments, Maintenance, Drivers, Reports, Notifications</p>
+  </div>
+
+  <div class="role-card" style="background: linear-gradient(135deg,#ecfdf5,#d1fae5); border-color:#6ee7b7;">
+    <div class="role-title">🟢 Rental Agent <span class="role-badge badge-agent">Front Desk</span></div>
+    <p>The Rental Agent handles the day-to-day customer interactions. They can approve or reject bookings, record vehicle pickups and returns, verify customers, create contracts, record payments manually, and manage maintenance requests. They cannot modify vehicle pricing, access financial reports, or view the audit log.</p>
+    <p><strong>Sidebar modules:</strong> Dashboard, Vehicles, Bookings, Contracts, Customers, Payments, Maintenance, Drivers, Notifications</p>
+  </div>
+
+  <div class="role-card" style="background: linear-gradient(135deg,#eff6ff,#dbeafe); border-color:#93c5fd;">
+    <div class="role-title">🔵 Customer <span class="role-badge badge-customer">Self-Service</span></div>
+    <p>The Customer can browse available vehicles, submit booking requests, make payments for approved bookings, and view their own rental history. They cannot access any other customer's data, modify prices, or access any staff module. All data access is strictly limited to records they own.</p>
+    <p><strong>Sidebar modules:</strong> Dashboard, Vehicles, Bookings, Payments, Notifications</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 6 — CUSTOMER ROLE
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-label">Section 6</div>
+    <h2>Customer Role — Screens &amp; Features</h2>
+    <p>The self-service experience for vehicle renters.</p>
+  </div>
+
+  <!-- Screenshot 8 — Customer Dashboard -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #1e40af, #2563eb); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 3.1 — Customer Dashboard (Muaz's Account)</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Personalised greeting with customer name and date. Three KPI cards: Upcoming Bookings, Active Rentals, Completed. "Book a Vehicle" quick-access button. Available vehicles list with thumbnails. Quick Actions panel. Dark sidebar with Customer modules only (Dashboard, Vehicles, Bookings, Payments, Notifications).</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173/dashboard</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 3.1</span>
+      <div class="fig-text">
+        <strong>Customer Dashboard.</strong>
+        The customer dashboard shows a personalised greeting with the customer's first name and the current date. Three KPI cards display <em>Upcoming Bookings</em>, <em>Active Rentals</em>, and <em>Completed</em> rentals. A "Book a Vehicle" button in the top right provides quick access to the booking form. The main content area shows a list of available vehicles with thumbnail photos, category, registration number, and daily rate. A Quick Actions panel on the right provides direct links to Browse Vehicles, New Booking, My Bookings, and Payment History. The dark sidebar shows only the modules relevant to a customer: Dashboard, Vehicles, Bookings, Payments, and Notifications.
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 9 — Vehicles Page -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #0f172a, #1e3a8a); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 3.2 — Available Vehicles: Customer View</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Responsive vehicle card grid showing 3 visible cards: Toyota RAV4, Honda Civic, BMW 5 Series — each with full-width photo, category, registration, colour, seating, fuel type, transmission, daily price badge, and "Book Now" button. Search bar at top.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173/vehicles</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 3.2</span>
+      <div class="fig-text">
+        <strong>Available Vehicles — Customer View.</strong>
+        The vehicles page shows all currently available vehicles in a responsive card grid. Each vehicle card displays a full-width photograph, the vehicle name, category, registration number, colour, seating capacity, fuel type, transmission type, and the daily rental price in a blue pill badge on the image. A prominent "Book Now" button appears at the bottom of each card. Customers can search by make, model, or plate number using the search bar at the top. The page shows 5 vehicles available for rental: Toyota RAV4, Honda Civic, BMW 5 Series, Ford Explorer, and Toyota Corolla.
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 10 — Bookings Page -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #1e3a8a, #1d4ed8); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 3.3 — Customer Bookings: BK0STUT4QN</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Booking history table showing reference BK0STUT4QN — BMW 5 Series, Oct 10–11 2026, $365.00, APPROVED status badge. "+ New Booking" button top-right. Status filter dropdown. Booking reference is a clickable blue link to the detail page.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173/bookings</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 3.3</span>
+      <div class="fig-text">
+        <strong>Bookings Page — Customer View.</strong>
+        The bookings page lists all of the customer's reservation history in a table format. Each row shows the booking reference number (as a clickable blue link), the vehicle name, pickup date, return date, total amount, and current status badge. A "+ New Booking" button in the top right allows customers to create new reservations. A status filter dropdown allows filtering by booking state. In this screenshot, one booking (BK0STUT4QN) for a BMW 5 Series from Oct 10–11, 2026, costing $365.00, is shown with an "APPROVED" status badge — meaning the admin has approved it and the customer can now proceed to pay.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 7 — ADMINISTRATOR ROLE
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-label">Section 7</div>
+    <h2>Administrator Role — Screens &amp; Features</h2>
+    <p>Full system control with complete visibility across all operations.</p>
+  </div>
+
+  <!-- Screenshot 11 — Admin Dashboard -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #7c3aed, #2563eb); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 4.1 — Administrator Dashboard</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Four KPI cards: Total Vehicles (5), Active Rentals (0), Overdue (0), Revenue ($0.00 simulated). Revenue area chart (last 6 months). Fleet Status sidebar with colour-coded bars. Full sidebar including Contracts, Maintenance, Drivers, Reports, Audit Log.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173/admin/dashboard</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 4.1</span>
+      <div class="fig-text">
+        <strong>Administrator Dashboard.</strong>
+        The administrator dashboard shows a comprehensive overview of the entire system. Four KPI cards at the top display: <em>Total Vehicles</em> (5, with 5 available), <em>Active Rentals</em> (0, 0 pending), <em>Overdue</em> (0, need attention), and <em>Revenue</em> ($0.00, simulated). Below the cards is a Revenue area chart spanning the last 6 months with a "Simulated" label indicating demo data. On the right side is a Fleet Status panel with colour-coded progress bars for Available, On Rental, Maintenance, and Overdue counts. The sidebar shows all available modules including Contracts, Customers, Maintenance, Drivers, Reports, and Audit Log — which are not available to customers.
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 12 — Admin Bookings -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #1e3a8a, #2563eb); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 4.2 — Admin Bookings Management</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Bookings table with Customer column showing 3 APPROVED bookings: Muaz muhammed – BMW 5 Series ($365), Jane Demo – Honda Civic ($246.20), Jane Demo – Toyota RAV4 ($282.50). Admins can approve, reject, record pickups/returns from this view.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173/admin/bookings</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 4.2</span>
+      <div class="fig-text">
+        <strong>Administrator Bookings Management.</strong>
+        Unlike the customer view, the administrator bookings table includes a <em>Customer</em> column showing who made each booking. Three bookings are visible: Muaz muhammed booked a BMW 5 Series ($365), Jane Demo booked a Honda Civic ($246.20), and Jane Demo also booked a Toyota RAV4 ($282.50). All three are in APPROVED status. Administrators can click any booking to view full details, approve or reject pending bookings, record pickups and returns, and manage the entire booking lifecycle from this view.
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 13 — Contracts -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #0f172a, #374151); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 4.3 — Rental Contracts Page</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Contracts page with search bar and status filter. Empty state: "No contracts found — contracts are created from approved bookings." "+ New Contract" and "Create Contract" buttons visible. Contracts are auto-numbered (e.g., CT-2026-00001) when generated from a booking reference.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173/admin/contracts</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 4.3</span>
+      <div class="fig-text">
+        <strong>Rental Contracts Page.</strong>
+        The contracts page allows staff to generate and manage formal rental agreements. The interface shows a search bar and status filter at the top, and currently displays "No contracts found" with a description saying contracts are created from approved bookings. A "+ New Contract" button and a "Create Contract" button are available. To create a contract, staff enter the booking reference number of an approved booking, and the system automatically generates a numbered contract (e.g., CT-2026-00001) with standard rental terms, linking it to the booking, customer, and vehicle.
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 14 — Customers -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #1e3a8a, #0ea5e9); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 4.4 — Customers Management Page</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Two customer records: Muaz muhammed (antimuaz@gmail.com, 0912121212, Unverified, Active) and Jane Demo (customer@fleetflow.dev, +1-555-0100, Verified, Active). Columns: name, email, phone, verification status, account status, join date. Click to view full profile and booking history.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173/admin/customers</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 4.4</span>
+      <div class="fig-text">
+        <strong>Customers Management Page.</strong>
+        The customers page shows a list of all registered customers with their name, email address, phone number, verification status, account status, and join date. Two customers are shown: <em>Muaz muhammed</em> (antimuaz@gmail.com, 0912121212, Unverified, Active) and <em>Jane Demo</em> (customer@fleetflow.dev, +1-555-0100, Verified, Active). Staff can click any customer to view their full profile, booking history, and driving licence information, and can mark customers as verified once their identity and licence have been confirmed.
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 15 — Drivers -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #374151, #1f2937); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 4.5 — Drivers Management Page</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Four status cards at top: Available (0), On Assignment (0), On Leave (0), Inactive (0). Empty state: "No drivers found — Add your first driver to get started." "Add Driver" button opens form for name, email, phone, licence number, expiry, class, and years of experience.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173/admin/drivers</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 4.5</span>
+      <div class="fig-text">
+        <strong>Drivers Management Page.</strong>
+        The drivers page manages all registered drivers in the fleet. Four status summary cards at the top show counts for Available (0), On Assignment (0), On Leave (0), and Inactive (0) drivers. Currently no drivers have been added, so the empty state message "No drivers found — Add your first driver to get started" is displayed with an "Add Driver" button. Clicking this opens a form to enter the driver's name, email, phone, licence number, licence expiry date, licence class, and years of experience.
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 16 — Reports -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #065f46, #047857); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 4.6 — Reports &amp; Exports Page</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">"From Date" and "To Date" filter fields. Two export sections: Bookings Export (CSV with customer + vehicle details) and Payments Export (CSV marked as simulated). Warning banner: CSV formula injection protection applied to all fields.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173/admin/reports</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 4.6</span>
+      <div class="fig-text">
+        <strong>Reports &amp; Exports Page.</strong>
+        The reports page provides data export functionality for administrators and fleet managers. A date filter section with "From Date" and "To Date" fields allows filtering records by time period. Two export options are presented: <em>Bookings Export</em> (all booking records with customer and vehicle details) and <em>Payments Export</em> (payment transactions, all marked as simulated). Both can be downloaded as CSV files. A warning banner at the bottom notes that all payment data is simulated and that CSV formula injection protection is applied to all exported fields to prevent spreadsheet attacks.
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 17 — Audit Log -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #1e1b4b, #312e81); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 4.7 — Audit Log (Administrator Only)</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Security event log with timestamp, action type, actor name/email, description, and IP address. Entries: System Administrator login, Muaz muhammed login/logout/login, System Administrator logout, Booking Approved: BK0STUT4QN, System Administrator login. Colour-coded action badges (USER LOGIN = green, USER LOGOUT = grey, BOOKING APPROVED = green).</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173/admin/audit-log</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 4.7</span>
+      <div class="fig-text">
+        <strong>Audit Log — Administrator Only.</strong>
+        The audit log is the system's complete security record, accessible only to administrators. Every significant action is captured with a timestamp, action type, actor name and email, description, affected resource, and IP address. In the screenshot, the log shows: System Administrator logged in, Muaz muhammed logged in, Muaz muhammed logged out, Muaz muhammed logged in again, System Administrator logged out, <em>Booking Approved: BK0STUT4QN</em> by System Administrator, and System Administrator logged in. Action types are colour-coded: USER LOGIN (green), USER LOGOUT (grey), BOOKING APPROVED (green), etc. Staff can filter by action type and search by description.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 8 — RENTAL AGENT ROLE
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-label">Section 8</div>
+    <h2>Rental Agent Role — Screens &amp; Features</h2>
+    <p>The front-desk role focused on daily customer operations.</p>
+  </div>
+
+  <p>
+    The Rental Agent is responsible for the operational side of bookings — approving or rejecting customer requests, managing vehicle pickups and returns, recording inspections, and assisting customers with their rentals. Their dashboard is focused on operational data rather than financial analytics.
+  </p>
+
+  <!-- Screenshot 18 — Agent Dashboard -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #065f46, #2563eb); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 5.1 — Rental Agent Dashboard</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Four KPI cards: Total Vehicles (5, 5 available), Active Rentals (0), Overdue (0), Available (5 ready). Available Vehicles list with thumbnails in main area. Fleet Status colour bars. Quick Actions: View Bookings, Fleet Overview, Maintenance. Sidebar excludes Audit Log and Reports.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173/agent/dashboard</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 5.1</span>
+      <div class="fig-text">
+        <strong>Rental Agent Dashboard.</strong>
+        The agent dashboard shows four KPI cards: <em>Total Vehicles</em> (5, 5 available), <em>Active Rentals</em> (0, 0 pending), <em>Overdue</em> (0, need attention), and <em>Available</em> (5, ready for rental). The main content area shows the "Available Vehicles" list with thumbnail photos, helping the agent quickly see what is ready for rental. A Fleet Status sidebar shows colour-coded bars for Available, On Rental, Maintenance, and Overdue. The Quick Actions panel includes links to View Bookings, Fleet Overview, and Maintenance. Notice the sidebar does not include Audit Log or Reports — these are restricted to higher roles.
+      </div>
+    </div>
+  </div>
+
+  <h3>Agent Responsibilities</h3>
+  <p>A Rental Agent's typical daily workflow in FleetFlow:</p>
+
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-num">1</div>
+      <div class="flow-content">
+        <div class="fc-title">Review Pending Bookings</div>
+        <div class="fc-desc">Open the Bookings page and filter by PENDING status. Review each request for valid dates and vehicle availability.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">2</div>
+      <div class="flow-content">
+        <div class="fc-title">Approve or Reject</div>
+        <div class="fc-desc">Click the booking to open the detail page. Click Approve (notifies customer, who can then pay) or Reject (with an optional reason shown to the customer).</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">3</div>
+      <div class="flow-content">
+        <div class="fc-title">Record Pickup Inspection</div>
+        <div class="fc-desc">When the customer arrives, record the pre-rental inspection — current mileage, fuel level, any existing damage — and confirm pickup. Booking moves to ACTIVE.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">4</div>
+      <div class="flow-content">
+        <div class="fc-title">Record Return Inspection</div>
+        <div class="fc-desc">When the vehicle is returned, record the post-rental inspection. The system calculates late-return fees automatically. Booking moves to COMPLETED.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">5</div>
+      <div class="flow-content">
+        <div class="fc-title">Verify Customers</div>
+        <div class="fc-desc">Check driving licence details on the customer profile and mark the customer as verified once their identity is confirmed.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 9 — FLEET MANAGER ROLE
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-label">Section 9</div>
+    <h2>Fleet Manager Role — Screens &amp; Features</h2>
+    <p>Strategic fleet oversight, vehicle management, and operational reporting.</p>
+  </div>
+
+  <!-- Screenshot 19 — Fleet Manager Dashboard -->
+  <div class="screenshot-block">
+    <div style="background: linear-gradient(135deg, #92400e, #b45309); height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🖼️</div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Fig 6.1 — Fleet Manager Dashboard</div>
+      <div style="font-size: 13px; opacity: 0.8; max-width: 440px;">Identical layout to Admin dashboard: KPI cards (Total Vehicles, Active Rentals, Overdue, Revenue), Revenue area chart, Fleet Status sidebar bars. Key difference: Audit Log is absent from the sidebar. Header and sidebar show "Fleet Manager" role label confirming the access context.</div>
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 16px; font-size: 12px;">Screenshot: localhost:5173/manager/dashboard</div>
+    </div>
+    <div class="screenshot-caption">
+      <span class="fig-num">Fig 6.1</span>
+      <div class="fig-text">
+        <strong>Fleet Manager Dashboard.</strong>
+        The Fleet Manager dashboard is identical in structure to the Administrator dashboard, showing the full set of KPI cards (Total Vehicles, Active Rentals, Overdue, Revenue), the Revenue area chart, and Fleet Status bars. The key difference from the Administrator is that the sidebar does not include the Audit Log — Fleet Managers can manage operations and finances but do not have access to the security event log. The Fleet Manager account shown here is labelled "Fleet Manager" in both the sidebar and the top-right header, confirming the role context.
+      </div>
+    </div>
+  </div>
+
+  <h3>Fleet Manager Responsibilities</h3>
+  <p>The Fleet Manager focuses on the operational and financial health of the fleet:</p>
+
+  <div class="feature-grid">
+    <div class="feature-item">
+      <div class="fi-title">🚗 Vehicle Management</div>
+      <div class="fi-desc">Add new vehicles to the fleet with full specs, pricing, insurance and registration dates. Edit existing vehicles and archive decommissioned ones.</div>
+    </div>
+    <div class="feature-item">
+      <div class="fi-title">🔧 Maintenance Scheduling</div>
+      <div class="fi-desc">Create and schedule maintenance records for vehicles. Assign technicians, track costs, and the system automatically marks vehicles unavailable during active maintenance.</div>
+    </div>
+    <div class="feature-item">
+      <div class="fi-title">🚕 Driver Management</div>
+      <div class="fi-desc">Add driver profiles with licence details, manage availability, assign drivers to bookings, and track assignment history.</div>
+    </div>
+    <div class="feature-item">
+      <div class="fi-title">📊 Reports &amp; Analytics</div>
+      <div class="fi-desc">View revenue charts, fleet utilisation, and export booking and payment data as CSV files for external analysis.</div>
+    </div>
+    <div class="feature-item">
+      <div class="fi-title">📋 Contracts</div>
+      <div class="fi-desc">Generate rental contracts from approved bookings. View contract terms, signing dates, and manage contract status.</div>
+    </div>
+    <div class="feature-item">
+      <div class="fi-title">👥 Customer Oversight</div>
+      <div class="fi-desc">View all customer profiles, verify driving licences, and manage account status.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 10 — BOOKING & PAYMENT LIFECYCLE
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-label">Section 10</div>
+    <h2>Booking &amp; Payment Lifecycle</h2>
+    <p>The complete end-to-end journey from booking request to rental completion.</p>
+  </div>
+
+  <p>
+    FleetFlow models the full rental workflow as a state machine. A booking passes through defined statuses, with each transition triggering notifications, payment requirements, and vehicle status updates.
+  </p>
+
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-num">1</div>
+      <div class="flow-content">
+        <div class="fc-title">Customer Submits Booking → PENDING</div>
+        <div class="fc-desc">Customer selects vehicle, dates, and location. The server calculates all pricing (daily rate × days + tax + security deposit) and checks availability using a serializable database transaction to prevent double-booking. Customer receives a notification confirming submission.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">2</div>
+      <div class="flow-content">
+        <div class="fc-title">Staff Approves Booking → APPROVED</div>
+        <div class="fc-desc">An agent or administrator reviews the booking and approves it. The customer receives a notification and a blue "Payment Required" banner appears on their booking detail page.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">3</div>
+      <div class="flow-content">
+        <div class="fc-title">Customer Pays → CONFIRMED</div>
+        <div class="fc-desc">Customer opens the payment page, selects a payment method (Card, Cash, or Bank Transfer), provides a security deposit guarantee (Credit Card Hold, ID Copy, or Cash Deposit), agrees to terms, and submits. All payments are clearly marked as SIMULATED. The booking advances to CONFIRMED.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">4</div>
+      <div class="flow-content">
+        <div class="fc-title">Staff Records Pickup → ACTIVE</div>
+        <div class="fc-desc">On the pickup date, a rental agent records the pre-rental inspection (mileage, fuel level, existing damage). The vehicle status changes to RENTED and the booking becomes ACTIVE.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">5</div>
+      <div class="flow-content">
+        <div class="fc-title">Staff Records Return → COMPLETED</div>
+        <div class="fc-desc">When the vehicle is returned, the agent records the post-rental inspection. The system automatically calculates any late return fees (grace period of 2 hours, then 1.5× daily rate per late day). The vehicle status returns to AVAILABLE and the booking is COMPLETED.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">6</div>
+      <div class="flow-content">
+        <div class="fc-title">Security Deposit Released</div>
+        <div class="fc-desc">Once the vehicle is confirmed returned in good condition, the security deposit is released back to the customer. Any damage costs or late fees are charged from the deposit before release.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    💡 <strong>Pricing transparency:</strong> All financial totals are calculated on the server. Customers cannot manipulate prices by modifying API requests — any price submitted by the client is ignored and recalculated server-side.
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 11 — SECURITY
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-label">Section 11</div>
+    <h2>Security Features</h2>
+    <p>Security is built into every layer of FleetFlow, not added as an afterthought.</p>
+  </div>
+
+  <table class="sec-table">
+    <tr><th>Security Control</th><th>Implementation</th></tr>
+    <tr><td><strong>Password Storage</strong></td><td>Argon2id with 64 MB memory cost, 3 time iterations, 4 parallel threads. Industry's strongest algorithm.</td></tr>
+    <tr><td><strong>Authentication</strong></td><td>JWT access tokens (15-minute expiry) + refresh tokens (7-day expiry). Refresh tokens are stored in the database and can be revoked on logout or password change.</td></tr>
+    <tr><td><strong>Authorization</strong></td><td>Role-based access control enforced on every API endpoint. Frontend UI changes reflect permissions but the backend independently verifies every request.</td></tr>
+    <tr><td><strong>IDOR Protection</strong></td><td>Customers can only access their own bookings, payments, and notifications. Any attempt to access another user's data returns 403 Forbidden.</td></tr>
+    <tr><td><strong>Rate Limiting</strong></td><td>Auth endpoints: 10 attempts per 15 minutes. Password reset: 5 per hour. General API: 100 per 15 minutes.</td></tr>
+    <tr><td><strong>SQL Injection</strong></td><td>All database access through Prisma ORM with parameterized queries. Raw SQL is never used.</td></tr>
+    <tr><td><strong>Security Headers</strong></td><td>Helmet.js sets: Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, and more.</td></tr>
+    <tr><td><strong>CORS</strong></td><td>Restricted to the configured frontend origin only. No wildcard CORS.</td></tr>
+    <tr><td><strong>Input Validation</strong></td><td>All request bodies validated with Zod schemas before processing. Invalid inputs return structured error messages.</td></tr>
+    <tr><td><strong>CSV Injection</strong></td><td>All CSV export fields are sanitised. Values starting with =, +, -, @, tab, or carriage return are escaped to prevent formula injection in spreadsheet applications.</td></tr>
+    <tr><td><strong>Concurrency Safety</strong></td><td>Booking creation uses PostgreSQL serializable isolation level to prevent double-booking under concurrent requests.</td></tr>
+    <tr><td><strong>Audit Logging</strong></td><td>All logins, logouts, password changes, booking approvals, payments, and admin actions are logged with timestamp, actor, IP address, and resource reference.</td></tr>
+    <tr><td><strong>Secret Management</strong></td><td>All secrets (JWT keys, database credentials) are in .env files which are gitignored. No secrets are committed to the repository.</td></tr>
+    <tr><td><strong>Production Safety</strong></td><td>Stack traces are suppressed in production responses. Error messages are generic to prevent information leakage.</td></tr>
+    <tr><td><strong>Payment Security</strong></td><td>Only the last 4 digits of a card are ever stored as a display reference. No card numbers, CVVs, or full payment credentials are stored anywhere.</td></tr>
+  </table>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 12 — CONCLUSION
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-label">Section 12</div>
+    <h2>Conclusion</h2>
+  </div>
+
+  <p>
+    FleetFlow is a complete, production-quality vehicle rental and fleet management platform that demonstrates real-world software engineering across every discipline — database design, REST API architecture, secure authentication, business logic, role-based access control, and modern frontend development.
+  </p>
+
+  <h3>What Was Delivered</h3>
+  <ul>
+    <li>A <strong>beautiful, responsive public landing page</strong> with animations, vehicle showcase, and clear CTAs</li>
+    <li>A <strong>secure authentication system</strong> with Argon2id hashing, JWT tokens, rate limiting, and password reset</li>
+    <li>A <strong>complete vehicle fleet module</strong> with category management, compliance tracking, and image support</li>
+    <li>A <strong>concurrency-safe booking system</strong> that prevents double-booking using serializable transactions</li>
+    <li>A <strong>realistic payment flow</strong> with security deposits, collateral options, and simulated transactions</li>
+    <li>A <strong>full rental lifecycle</strong>: submit → approve → pay → pickup inspection → active → return inspection → complete</li>
+    <li>A <strong>maintenance management module</strong> with scheduling, technician assignment, and vehicle status integration</li>
+    <li>A <strong>driver management module</strong> with licence tracking and assignment conflict detection</li>
+    <li>A <strong>contracts module</strong> that generates formal rental agreements from approved bookings</li>
+    <li>A <strong>reports module</strong> with CSV export and injection protection</li>
+    <li>A <strong>complete audit log</strong> recording all system events for security and compliance</li>
+    <li>A <strong>role-specific dashboard</strong> for each of the four user roles</li>
+    <li>A <strong>real PostgreSQL database</strong> with 20+ entities, foreign keys, indexes, and migrations</li>
+    <li><strong>13 automated tests</strong> covering the pricing engine and authentication utilities</li>
+    <li><strong>Docker and GitHub Actions</strong> configuration for containerised deployment and CI/CD</li>
+  </ul>
+
+  <h3>Known Limitations &amp; Future Work</h3>
+  <ul>
+    <li>Payments are <strong>simulated</strong> — a real payment provider (e.g. Stripe) would need to be integrated for production</li>
+    <li>Email uses <strong>Ethereal preview</strong> in development — production requires a real SMTP provider</li>
+    <li>No <strong>HTTPS enforcement</strong> — TLS should be configured at the reverse proxy level before deployment</li>
+    <li>Rate limiting uses an <strong>in-memory store</strong> — Redis should be used for multi-instance deployments</li>
+    <li>File uploads for <strong>licence documents</strong> and vehicle images are scaffolded but require cloud storage (e.g., S3) for production</li>
+  </ul>
+
+  <div class="info-box" style="margin-top: 30px;">
+    <strong>Access the system:</strong> Frontend → http://localhost:5173 &nbsp;|&nbsp; Backend API → http://localhost:4000/api &nbsp;|&nbsp; Health Check → http://localhost:4000/health
+  </div>
+
+  <div style="margin-top: 60px; padding-top: 30px; border-top: 2px solid #e2e8f0; text-align: center; color: #94a3b8; font-size: 13px;">
+    <strong style="color: #2563eb; font-size: 18px;">FleetFlow</strong><br/>
+    Secure Vehicle Rental &amp; Fleet Management System<br/>
+    © 2026 FleetFlow. All rights reserved.<br/><br/>
+    <em>This document was generated as part of the FleetFlow system documentation.</em>
+  </div>
+</div>
+
+</body>
+</html>
